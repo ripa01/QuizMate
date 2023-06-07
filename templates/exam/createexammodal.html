@@ -1,0 +1,131 @@
+<div
+    class="relative z-10 hidden"
+    aria-labelledby="modal-title"
+    role="dialog"
+    aria-modal="true"
+    id="createexammodal"
+>
+   
+    <div
+        class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+    ></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div
+            class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+        >
+          
+            <div
+                class="relative transform overflow-hidden rounded-xl bg-secondary text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl border-2 border-black"
+            >
+                <!-- starting from here -->
+                <div class="card w-full rounded-xl text-white font-bold">
+                    <div class="p-8 text-md">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2">
+                                    <label id="" for="name" class="text-md"
+                                        >Exam Name</label
+                                    >
+                                    <input
+                                        type="text"
+                                        name="exam_name"
+                                        id="name"
+                                        class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                        placeholder="Enter Exam Name"
+                                        required
+                                    />
+                                </div>
+                                <div class="">
+                                    <label for="date" class="text-md"
+                                        >Exam Date</label
+                                    >
+                                    <input
+                                        type="date"
+                                        name="exam_date"
+                                        id="date"
+                                        class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                        required
+                                    />
+                                </div>
+                                <div class="">
+                                    <label for="duration" class="text-md"
+                                        >Duration</label
+                                    >
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        name="exam_duration"
+                                        id="duration"
+                                        class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                        placeholder="Enter Duration in Minutes"
+                                        required
+                                    />
+                                </div>
+
+                                <div class="">
+                                    <label for="start_time" class="text-md"
+                                        >Start Time</label
+                                    >
+                                    <input
+                                        type="time"
+                                        name="exam_start_time"
+                                        id="start_time"
+                                        class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                        required
+                                    />
+                                </div>
+                              
+                                <div class="col-span-2 row-span-3">
+                                    <label for="instructions" class="text-md"
+                                        >Instructions</label
+                                    >
+                                    <textarea
+                                        name="exam_instruction"
+                                        id="instruction"
+                                        cols="30"
+                                        rows="5"
+                                        class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                        placeholder="Enter Instructions"
+                                    ></textarea>
+                                </div>
+                                <input
+                                    type="text"
+                                    name="class_code"
+                                    value="{{class.code}}"
+                                    hidden
+                                />
+                                <input
+                                    type="text"
+                                    name="action"
+                                    value="create_exam"
+                                    hidden
+                                />
+
+                                <div class="col-span-2">
+                                    <button
+                                        class="w-full py-2 bg-white hover:bg-gray-100 text-black hover:text-primary rounded-lg text-md"
+                                        type="submit"
+                                    >
+                                        Create Exam
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="w-full mt-2">
+                            <button
+                                class="w-full py-2 bg-red-400 hover:bg-red-200 text-white hover:text-red-700 rounded-lg text-md"
+                                onclick="createexamModal()"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ending here -->
+            </div>
+        </div>
+    </div>
+</div>

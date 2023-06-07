@@ -1,0 +1,243 @@
+{%extends "exam/base.html" %} {% load static %} {% block content %}
+
+<div class="max-w-7xl mx-auto my-2 p-4">
+    <div class="card bg-primary w-full rounded-xl text-white font-bold border-2 border-black">
+        <div class="px-8 pt-16 pb-8">
+            <h1 class="text-3xl font-bold">{{exam.name}}</h1>
+            <p class="text-md mt-2 text-gray-200">{{class.name}}</p>
+            <p class="text-md mt-1 text-gray-200">
+                Due {{exam.date | date:"d M Y"}},
+                <span> {{exam.start_time | date:"h:i A"}}</span>
+            </p>
+            <p class="mt-1 mb-4">Total questions: {{exam.questions.count}}</p>
+            <button class="mt-2 bg-white text-primary px-4 py-2 font-bold rounded-lg hover:bg-gray-200"
+            onclick="editexamModal()"
+            >
+                Update Exam
+            </button> 
+            
+        </div>
+    </div>
+    <div>
+        
+        <div class="card bg-white w-full rounded-xl mt-4 border-2 border-black">
+            <div class="p-8">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-3xl font-bold">Questions</h1>
+                    <button
+                        class="bg-primary text-white font-bold py-2 px-4 rounded-md hover:bg-secondary"
+                        onclick="createQuestionModal()">
+                        Add New Question
+                    </button>
+                </div>
+                <div class="mt-4">
+                    {% for question in questions %}
+                    <div class="card bg-white w-full rounded-xl mt-4 border-2">
+                        <div class="px-8 py-4">
+
+                            <span class="mb-1 bg-primary text-white font-bold rounded-lg px-2 text-xs" id="qtype{{question.id}}">{{question.question_type}}</span>
+
+                            <div class="lg:flex justify-start lg:gap-8">
+                                <div>
+                                    <h1 id="q{{question.id}}" class="text-lg font-bold prose prose-slate">{{question.question | safe}}</h1>
+                                    <span class="text-gray-700 mr-4 text-sm font-bold">{{question.mark}} mark</span>
+                                </div>
+                                <div class="flex-col lg:flex ">
+                                    <div class="flex gap-4">
+                                        <button
+                                            class="inline-flex font-bold w-full justify-center rounded-md border border-transparent bg-primary px-8 py-2 text-base text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                                            onclick="createQuestionModal('{{question.id}}')"
+                                            >
+                                        Edit
+                                        </button>
+                                        <button
+                                            class="inline-flex font-bold w-full justify-center rounded-md border border-transparent bg-rose-400 px-8 py-2 text-base text-white shadow-sm hover:bg-tertiary focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                                            onclick="deletequestionModal('{{question.id}}')">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex flex-col">
+                                    {% for option in question.options.all %}
+                                    <div class="flex items-center">
+                                        <input
+                                            type="radio"
+                                            id="answer"
+                                            class="mr-2 text-primary"
+                                            disabled
+                                        />
+                                        <label for="answer1"
+                                            > <span class="{{question.id}}answer">{{option.option}}</span>
+                                            {% if option.is_correct %}
+                                            <span id="" class="text-xs px-2 rounded-md bg-green-200">Correct</span>
+                                            {% endif %}
+                                            </label
+                                        >
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+    function editexamModal() {
+        document.getElementById("name").value = "{{exam.name}}";
+        document.getElementById("date").value = "{{exam.date | date:'Y-m-d'}}";
+        document.getElementById("start_time").value = "{{exam.start_time | date:'H:i'}}";
+       
+        document.getElementById("duration").value = "{{exam.duration}}";
+        document.getElementById("instruction").value = `{{exam.instruction | safe}}`;
+        
+        var createexam = document.getElementById("editexammodal");
+        if (createexam.classList.contains("block")) {
+            createexam.classList.remove("block");
+            createexam.classList.add("hidden");
+        } else {
+            createexam.classList.remove("hidden");
+            createexam.classList.add("block");
+        }
+    }
+    </script>
+
+
+    <div
+        class="relative z-10 hidden"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+        id="editexammodal"
+    >
+      
+        <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+        ></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div
+                class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+            >
+            <div
+                    class="relative transform overflow-hidden rounded-xl bg-secondary text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl border-2 border-black"
+                >
+                    <!-- starting from here -->
+                    <div class="card w-full rounded-xl text-white font-bold">
+                        <div class="p-8 text-md">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="col-span-2">
+                                        <label id="modaltitle" for="name" class="text-md"
+                                            >Exam Name</label
+                                        >
+                                        <input
+                                            type="text"
+                                            name="exam_name"
+                                            id="name"
+                                            class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                            placeholder="Enter Exam Name"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="">
+                                        <label for="date" class="text-md"
+                                            >Exam Date</label
+                                        >
+                                        <input
+                                            type="date"
+                                            name="exam_date"
+                                            id="date"
+                                            class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="">
+                                        <label for="duration" class="text-md"
+                                            >Duration</label
+                                        >
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            name="exam_duration"
+                                            id="duration"
+                                            class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                            placeholder="Enter Duration in Minutes"
+                                        />
+                                    </div>
+
+                                    <div class="">
+                                        <label for="start_time" class="text-md"
+                                            >Start Time</label
+                                        >
+                                        <input
+                                            type="time"
+                                            name="exam_start_time"
+                                            id="start_time"
+                                            class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                            required
+                                        />
+                                    </div>
+                                   
+                                    <div class="col-span-2 row-span-3">
+                                        <label for="instructions" class="text-md"
+                                            >Instructions</label
+                                        >
+                                        <textarea
+                                            name="exam_instruction"
+                                            id="instruction"
+                                            cols="30"
+                                            rows="5"
+                                            class="w-full rounded-xl px-4 py-2 border-2 border-black text-gray-800 text-md"
+                                            placeholder="Enter Instructions"
+                                        ></textarea>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        name="class_code"
+                                        value="{{class.code}}"
+                                        hidden
+                                    />
+                                    <input
+                                        type="text"
+                                        name="action"
+                                        value="updateexam"
+                                        hidden
+                                    />
+
+                                    <div class="col-span-2">
+                                        <button
+                                            class="w-full py-2 bg-white hover:bg-gray-100 text-black hover:text-primary rounded-lg text-md"
+                                            type="submit"
+                                        >
+                                            Update Exam
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="w-full mt-2">
+                                <button
+                                    class="w-full py-2 bg-red-400 hover:bg-red-200 text-white hover:text-red-700 rounded-lg text-md"
+                                    onclick="editexamModal()"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ending here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endblock%}
+</div>

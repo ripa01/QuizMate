@@ -1,0 +1,13 @@
+asgiref==3.5.2
+beautifulsoup4==4.11.1
+Django==4.1.1
+django-ckeditor==6.5.1
+django-js-asset==2.0.0
+django-livereload-server==0.4
+django-livesync==0.5
+six==1.16.0
+soupsieve==2.3.2.post1
+sqlparse==0.4.2
+tornado==6.2
+watchdog==2.1.9
+websocket-client==1.4.1

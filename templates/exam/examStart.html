@@ -1,0 +1,79 @@
+{% extends 'exam/base.html' %} {% load static %}{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div
+        class="mt-36 w-full p-8 bg-gradient-to-tr from-secondary to-primary text-white shadow-xl rounded-2xl border-2 border-black"
+    >
+        <div class="w-full grid grid-cols-2">
+            <div class="col-span-2">
+                <h1 class="text-center font-bold text-3xl">
+                    {% if submitted %} You've already submitted your answer.
+                    <span
+                        >{% elif not ended %} Are you ready for the exam?</span
+                    >
+                    {% else %} Exam Already Ended {% endif %}
+                </h1>
+
+                <p class="text-center text-sm font-bold mt-2">
+                    Check the details below before starting.
+                </p>
+            </div>
+            <div
+                class="flex flex-col items-start justify-center font-bold text-shadow-xl"
+            >
+                <h1 class="text-left text-2xl font-bold">{{exam.name}}</h1>
+                <h2 class="text-left text-md">
+                    Starts on: {{exam.start_time | date:"h:i A"}}
+                </h2>
+                <h2 class="text-left text-md">
+                    Date: {{exam.date |date:"d M Y"}}
+                </h2>
+
+                <h2 class="text-left text-md">Duration: {{exam.duration}}</h2>
+                <h2 class="text-left text-md">
+                    Total Questions: {{questions.count}}
+                </h2>
+            </div>
+            <div>
+                <img
+                    src="{% static 'exam/images/hotairbaloon.svg' %}"
+                    alt=""
+                    class="w-64 mx-auto my-8"
+                />
+            </div>
+            <div class="col-span-2">
+                {% if submitted %}
+                <a
+                    href="{% url 'reportcard' exam.id request.user.id %}"
+                    class="w-full bg-white text-primary font-bold p-2 rounded-lg"
+                >
+                    View Results
+                </a>
+                {% elif started and not ended %}
+                <a
+                    href="{% url 'exam' exam.id %}"
+                    class="w-full bg-white text-primary font-bold p-2 rounded-lg"
+                >
+                    Start Exam
+                </a>
+
+                {% elif ended %}
+                <a
+                    href="{% url 'reportcard' exam.id request.user.id %}"
+                    class="w-full bg-white text-primary font-bold p-2 rounded-lg"
+                >
+                    View Results
+                </a>
+
+                {% else %}
+                <a
+                    href="#"
+                    class="w-full bg-white text-primary font-bold p-2 rounded-lg disabled"
+                >
+                    Exam not started yet
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

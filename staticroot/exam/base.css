@@ -1,0 +1,32 @@
+.upcomingExamCard {
+    background-image: url("images/onlinetest.svg");
+    background-repeat: no-repeat;
+    background-size: 7em;
+    background-position: right;
+    background-position-x: 90%;
+}
+/*
+.teacherClassCard {
+    background-image: url("images/teaching.svg");
+    background-repeat: no-repeat;
+    background-size: 9em;
+    background-position: top;
+    background-position-x: 80%;
+    background-position-y: 20%;
+}
+*/
+
+.bg1 {
+    background-image: url("images/bg1.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.polkabg {
+    background-image: radial-gradient(
+        #6b5ae0 1.6500000000000001px,
+        #f0f9ff 1.6500000000000001px
+    );
+    background-size: 38px 38px;
+}

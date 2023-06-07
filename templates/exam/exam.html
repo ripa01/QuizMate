@@ -1,0 +1,132 @@
+{%extends "exam/base.html" %} {% load static %} {% block content %}
+<div class="max-w-xl mx-auto mt-32">
+    <div
+        class="bg-white py-8 px-16 rounded-2xl shadow-xl border-2 border-black"
+    >
+        <span> SUMBIT YOUR ANSWER!!!</span>
+        <h1 class="text-2xl font-bold">{{question.question}}</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mcqfield">
+                {% for option in question.options.all %}
+                <div class="mt-4">
+                    <button
+                        type="button"
+                        onclick="selectanswer('{{option.id}}')"
+                        class="px-8 py-4 bg-white w-full text-left border-2 border-gray-200 rounded-xl"
+                    >
+                        <input
+                            type="radio"
+                            name="answer"
+                            id="option{{option.id}}"
+                            value="1"
+                            class="mr-2 text-primary"
+                        />
+                        <label
+                            id="answer{{option.id}}"
+                            for="option{{option.id}}"
+                            >{{option}}</label
+                        >
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="truefalsefield" class="hidden">
+                <div class="mt-4">
+                    <button
+                        type="button"
+                        onclick="selectanswer('True')"
+                        class="px-8 py-4 bg-white w-full text-left border-2 border-gray-200 rounded-xl"
+                    >
+                        <input
+                            type="radio"
+                            name="answer"
+                            id="optiontrue"
+                            value="1"
+                            class="mr-2 text-primary"
+                        />
+                        <label for="optiontrue">True</label>
+                    </button>
+                </div>
+                <div class="mt-4">
+                    <button
+                        type="button"
+                        onclick="selectanswer('False')"
+                        class="px-8 py-4 bg-white w-full text-left border-2 border-gray-200 rounded-xl"
+                    >
+                        <input
+                            type="radio"
+                            name="answer"
+                            id="optionfalse"
+                            value="1"
+                            class="mr-2 text-primary"
+                        />
+                        <label for="optionfalse">False</label>
+                    </button>
+                </div>
+            </div>
+            <input type="hidden" id="answer" name="answer" value="" />
+
+            <script>
+                if ("{{question.type}}" == "SingleMCQ") {
+                    document
+                        .getElementById("truefalsefield")
+                        .classList.remove("block");
+                    document
+                        .getElementById("truefalsefield")
+                        .classList.add("hidden");
+                    document
+                        .getElementById("mcqfield")
+                        .classList.remove("hidden");
+                    document.getElementById("mcqfield").classList.add("block");
+                } else if ("{{question.type}}" == "TrueFalse") {
+                    document
+                        .getElementById("truefalsefield")
+                        .classList.remove("hidden");
+                    document
+                        .getElementById("truefalsefield")
+                        .classList.add("block");
+                    document
+                        .getElementById("mcqfield")
+                        .classList.remove("block");
+                    document.getElementById("mcqfield").classList.add("hidden");
+                }
+                function selectanswer(id) {
+                    document.getElementById("option" + id).checked = true;
+                    document.getElementById("answer").value =
+                        document.getElementById("answer" + id).innerHTML;
+                }
+            </script>
+            <div class="mt-4">
+                <input type="hidden" name="question" value="{{question.id}}" />
+                <input
+                    type="hidden"
+                    name="answersheet"
+                    value="{{answersheet}}"
+                />
+
+                <div class="flex justify-between">
+                    {% if done != total %}
+                    <button
+                        type="submit"
+                        value="next"
+                        name="action"
+                        class="bg-primary text-white font-bold p-2 rounded-lg px-8 hover:bg-secondary"
+                    >
+                        Next
+                    </button>
+                    {% endif %}
+                    <button
+                        type="submit"
+                        value="submit"
+                        name="action"
+                        class="bg-red-500 text-white font-bold p-2 rounded-lg px-8 hover:bg-red-400"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{%endblock%}

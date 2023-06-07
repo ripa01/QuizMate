@@ -1,0 +1,27 @@
+.bg1 {
+    background-color: #e5e5f7;
+    opacity: 0.5;
+    background-image: repeating-radial-gradient(
+            circle at 0 0,
+            transparent 0,
+            #e5e5f7 12px
+        ),
+        repeating-linear-gradient(#444cf755, #444cf7);
+}
+
+ul.errorlist {
+    color: #eb7575;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-weight: bold;
+}
+
+ul li ul.errorlist {
+    margin-left: 20px;
+    color: #d62525;
+    font-size: 12px;
+    padding: 0;
+    list-style: none;
+}

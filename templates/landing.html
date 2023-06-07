@@ -1,0 +1,38 @@
+{%extends 'base.html' %} {% load static %} {% block content %}
+
+<body class="font-poppins max-w-screen overflow-x-hidden">
+    {%include 'reusable\landing_header.html'%}
+
+    <div id="body" class="min-h-screen max-w-7xl mx-auto z-0 overflow-hidden">
+        <div
+            class="grid lg:grid-cols-2 bg-primary rounded-3xl my-8 z-0 border-2 border-black"
+        >
+            <div class="h-full flex flex-col items-start justify-center p-16">
+                <h1
+                    class="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
+                >
+                    Online Quiz<br/>Made Easy
+                </h1>
+                <p class="w-4/5 my-4 mb-8 text-black text-sm text-justify">
+                    QuizMate's secure, professional web-based Quiz maker is an
+                    easy-to-use, customizable online testing solution for
+                    business, training & educational assessments with Tests &
+                    Quizzes graded instantly, saving hours of paperwork!
+                </p>
+                <button>
+                    <a
+                        class="bg-white hover:bg-gray-100 text-primary px-4 py-2 font-bold rounded-xl"
+                        href="/register"
+                        >Register Now</a
+                    >
+                </button>
+            </div>
+          
+            </div>
+        </div>
+
+    </div>
+    {%include 'reusable\landing_footer.html'%}
+</body>
+
+{% endblock %}

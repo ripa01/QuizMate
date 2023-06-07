@@ -1,0 +1,70 @@
+<div
+    id="profileheadermodal"
+    class="absolute hidden right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+    role="menu"
+    aria-orientation="vertical"
+    aria-labelledby="user-menu-button"
+    tabindex="-1"
+>
+
+    <a
+        href="/home"
+        class="block px-4 py-2 text-sm text-gray-700 hover:text-primary"
+        role="menuitem"
+        tabindex="-1"
+        id="user-menu-item-0"
+        ><i
+            class="fa-solid fa-house-user group-hover:text-sm mr-2"
+            aria-hidden="true"
+        ></i
+        >Dashboard</a
+    >
+    <a
+        href="#"
+        class="block px-4 py-2 text-sm text-gray-700 hover:text-primary"
+        role="menuitem"
+        tabindex="-1"
+        id="user-menu-item-0"
+        ><i class="fa fa-user group-hover:text-sm mr-2" aria-hidden="true"></i
+        >Your Profile</a
+    >
+
+    <a
+        href="#"
+        class="block px-4 py-2 text-sm text-gray-700 hover:text-primary"
+        role="menuitem"
+        tabindex="-1"
+        id="user-menu-item-1"
+        ><i class="fa-solid fa-gear mr-2"></i>Settings</a
+    >
+
+    <a
+    class="block px-4 py-2 text-sm text-gray-700 hover:text-primary"
+    role="menuitem"
+    tabindex="-1"
+    id="user-menu-item-2"
+    href="{% url 'change' %}"
+>
+    <i
+        class="fas fa-key mr-2"
+        aria-hidden="true"
+    ></i
+    >Change Password
+</a>
+
+
+
+    <button
+        class="block px-4 py-2 text-sm text-gray-700 hover:text-primary"
+        role="menuitem"
+        tabindex="-1"
+        id="user-menu-item-2"
+        onclick="logoutModal()"
+    >
+        <i
+            class="fa fa-sign-out group-hover:text-sm mr-2"
+            aria-hidden="true"
+        ></i
+        >Sign out
+    </button>
+</div>

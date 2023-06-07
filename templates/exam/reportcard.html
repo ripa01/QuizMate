@@ -1,0 +1,62 @@
+{%extends "exam/base.html" %} {% load static %} {% block content %}
+
+<div class="max-w-7xl mx-auto my-2 p-4">
+    <div
+        class="card bg-primary w-full rounded-xl text-white font-bold border-2 border-black"
+    >
+        <div class="px-8 py-16">
+            <h1 class="text-3xl font-bold">{{exam.name}}</h1>
+            <p class="text-md mt-2 text-gray-200">{{class.name}}</p>
+            <p class="text-md mt-1 text-gray-200">
+                Due {{exam.date | date:"d M Y"}},
+                <span> {{exam.start_time | date:"h:i A"}}</span>
+            </p>
+            <p class="mt-1">Total Responses: {{answersheet.count}}</p>
+        </div>
+    </div>
+    <div>
+        <div
+            class="card bg-white w-full rounded-xl mt-4 border-2 border-black overflow-hidden"
+        >
+            <table class="table-auto w-full rounded-xl">
+                <thead class="bg-secondary text-white font-bold">
+                    <tr class="table-row px-4">
+                        <th class="text-left pl-8 py-4">Student</th>
+                        <th class="text-center">Marks</th>
+                        <th class="text-center">Percentage</th>
+                        <th class="text-center">View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row px-4" >
+                        {% for answer in answersheet %}
+                    
+                        <td class="text-left pl-8 py-4">
+                            {{answer.student.first_name}}
+                            {{answer.student.last_name}}
+                        </td>
+                        <td class="text-center">
+                            {{answer.mark}}/{{answer.total_marks}}
+                        </td>
+                        
+                        <td class="text-center">{{answer.percentage}}%</td>
+                      
+                       
+                        <td class="text-center">
+                            <a
+                                href="{% url 'reportcard' answer.exam.id answer.student.id %}"
+                                class="bg-primary px-8 py-2 rounded-xl text-white font-bold hover:bg-secondary"
+                                >View</a
+                            > </td>
+                
+                        </tr>
+                   
+                            {% endfor %}
+                      
+                  
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{%endblock%}

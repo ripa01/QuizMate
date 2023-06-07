@@ -1,0 +1,348 @@
+{% extends 'exam/base.html' %} {% load static %}{% block content %}
+<div class="max-w-7xl mx-4 lg:mx-auto">
+    {% if joined %}
+    <div class="mt-4 bg-{{teacher.color.primary}} px-8 pt-24 pb-8 rounded-2xl border-2 border-black">
+        <div class="opacity-100">
+            <h1 class="text-5xl font-bold">{{class.name}}</h1>
+            {% if class.description != "" %}
+            <h2 class="mt-4">
+                <span class="font-bold">Description: </span>
+                {{class.description}} 
+            </h2>
+            {% endif %}
+
+            <h2 class="mt-2">
+                <span class="font-bold">Class Code: </span>{{class.code}}
+            </h2>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-4 py-4">
+        <div class="col-span-1 row-span-1 lg:row-span-5 w-full">
+            <div class="bg-white rounded-2xl shadow-xl p-4 mb-4 border-2 border-black">
+                <h2 class="font-bold">Class Code</h2>
+                <button type="button" class="hover:text-primary text-2xl ml-2 mt-2" onclick="copyClassCode()">
+                    <i id="copyclasscodeicon" class="fa-regular fa-copy"></i>
+                    <input id="classcode" class="pl-2 w-28 outline-none" value="{{class.code}}"  disabled></input>
+                </button>
+            </div>
+            <div class="bg-white rounded-2xl shadow-xl p-4 mb-4 border-2 border-black">
+                <h2 class="text-lg font-bold mb-2">Class Summary</h2>
+                <div class="mb-2">
+                    <h2 class="font-bold">Class Teacher</h2>
+                        <p class="ml-2">
+                            {% if class.teacher.first_name != "" %}
+                            {{class.teacher.first_name}} {{class.teacher.last_name}}
+                            {% else %}
+                            {{class.teacher.username}}
+                            {% endif %}
+                        </p>
+                    </div>
+                <div class="mb-2">
+                    <h2 class="font-bold">Total Exams</h2>
+                    <p class="ml-2">
+                        {{class.exams.count}}
+                    </p>
+                </div>
+                <div class="mb-2">
+                    <h2 class="font-bold">Total Students</h2>
+                    <p class="ml-2">
+                        {{class.students.count}}
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-span-3 rounded-2xl shadow-xl border-2 border-black overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-xl w-full">
+                <div class="flex items-center justify-around">
+                    <button onclick="classPageMenu('exams')" id="examButton" class="font-bold h-full py-4 w-full hover:bg-{{teacher.color.secondary}} hover:text-white hover:rounded-2xl active:border-b-2 active:border-primary bg-violet-100 text-gray-900 border-b-2 border-primary rounded-t">Exams</button>
+                    <button onclick="classPageMenu('people')" id="peopleButton" class="font-bold h-full py-4 w-full hover:bg-{{teacher.color.secondary}} hover:text-white hover:rounded-2xl active:border-b-2 active:border-primary">People</button>
+                    <button onclick="classPageMenu('settings')" id="settingsButton" class="font-bold h-full py-4 w-full hover:bg-{{teacher.color.secondary}} hover:text-white hover:rounded-2xl active:border-b-2 active:border-primary">Settings</button>
+                </div>
+            </div>
+        </div>
+        <div id="examPage" class="block col-span-3">
+            <div class="my-2 bg-white rounded-2xl shadow-xl p-4 border-2 border-black">
+                <h1 class="text-3xl font-bold">Upcoming Exams</h1>
+                
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 font-bold"
+                >
+                {% if teacher.status %}
+                    <div
+                            class="group card text-white rounded-xl hover:-translate-y-2 transition duration-300 ease-in-out overflow-hidden"
+                        >
+                            <div
+                                class="h-48 bg-{{teacher.color.primary}} rounded-xl group border-2 border-black"
+                            >
+                                <button
+                                    class="w-full h-full"
+                                    onclick="createexamModal()"
+                                >
+                                    <div class="h-full flex items-center justify-center">
+                                        <span
+                                            class="flex flex-col h-12 w-12 rounded-full bg-{{teacher.color.secondary}} p-4 text-2xl font-bold text-white flex items-center justify-center group-hover:w-full group-hover:h-full group-hover:rounded-xl transition-all duration-100"
+                                        >
+                                            +
+                                            <span class="hidden group-hover:block text-xl"
+                                                >Create Exam</span
+                                            >
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if exams|length > 0 %}
+                    {% for exam in exams %}
+                    <div
+                        class="upcomingExamCard group card text-black rounded-xl bg-{{teacher.color.primary}} hover:bg-{{teacher.color.secondary}} hover:-translate-y-2 transition duration-300 ease-in-out overflow-hidden border-2 border-black"
+                    >
+                    {% if teacher.status %}
+                        <a href="{% url 'examDetailsView' exam.id %}">
+                            {% else %}
+                        <a href="{% url 'examStart' exam.id %}">
+                            {% endif %}
+                            <div class="flex flex-col p-4 h-48 w-full truncate">
+                                <div>
+                                    <span
+                                        class="max-w-full bg-white text-black px-2 rounded-2xl text-left text-sm"
+                                    >
+                                        {{exam.classes.name }}
+                                    </span>
+                                </div>
+                                <div class="w-full mt-auto">
+                                    <h1
+                                        class="mt-2 text-black text-2xl font-bold capitalize"
+                                    >
+                                        {{exam.name}}
+                                    </h1>
+                                    <p class="">
+                                        {{exam.date | date:"d M Y"}},
+                                        {{exam.start_time | date:"h:i A"}}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                    {% elif request.user.id != class.teacher.id %}
+                    <div class="col-span-3 mt-4 w-full flex flex-col items-center justify-center gap-4">
+                        <img src="{% static 'exam/images/notify.svg' %}" alt="" class="w-64">
+                        <h1 class="text-md font-bold mt-4">Yahoo! No upcoming  exams!!</h1>
+                    </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+            <div class="mt-4 bg-white rounded-2xl shadow-xl p-4 border-2 border-black">
+                <h1 class="text-3xl font-bold">Archived Exams</h1>
+                {% if archived_exams|length > 0 %}
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 font-bold"
+                >
+                    {% for exam in archived_exams %}
+                    <div
+                        class="upcomingExamCard group card rounded-xl bg-{{teacher.color.primary}} hover:bg-{{teacher.color.secondary}} hover:-translate-y-2 transition duration-300 ease-in-out overflow-hidden border-2 border-black"
+                    >
+                        <a href="{% url 'reportcard' exam.id %}">
+                            <div class="flex flex-col p-4 h-48 w-full truncate">
+                                <div>
+                                    <span
+                                        class="max-w-full bg-white px-2 rounded-2xl text-left text-sm"
+                                    >
+                                        {{exam.classes.name }} |
+                                        {{exam.classes.code }}
+                                    </span>
+                                </div>
+                                <div class="w-full mt-auto">
+                                    <h1
+                                        class="mt-2 text-2xl font-bold capitalize"
+                                    >
+                                        {{exam.name}}
+                                    </h1>
+                                    <p class="">
+                                        {{exam.date | date:"d M Y"}},
+                                        {{exam.start_time | date:"h:i A"}}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="mt-4 w-full flex flex-col items-center justify-center gap-4">
+                    <h1 class="text-md font-bold mt-4">No archived exams.</h1>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="peoplePage" class="hidden col-span-3 bg-white rounded-2xl shadow-xl p-4 border-2 border-black">
+            <div class="mt-2 p-4">
+                <h2 class="text-2xl font-bold mt-2 mb-4">Teacher</h2>
+                <table class="w-full">
+                    <tbody>
+                        <tr class="border-y border-gray-400 pl-2">
+                                <td class="pl-8 pr-2 py-3 font-sm ml-2">
+                                    {% if class.teacher.first_name != "" %}
+                                    {{class.teacher.first_name}} {{class.teacher.last_name}}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </td>
+                                <td class="pl-8 pr-2 py-3 font-sm pl-2">{{class.teacher.username}}</td>
+                                <td class="pl-2 pr-8 py-3 font-sm pl-2">
+                                    <a href="mailto:{{student.email}}">
+                                        {% if class.teacher.email != "" %}
+                                        <i class="fa-solid fa-envelope mr-2"></i>
+                                        {{class.teacher.email}}
+                                        {% else %}
+                                        N/A
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+                <p class="flex justify-between items-center my-2">
+                    <span class="text-2xl font-bold my-2">Students</span>
+                    <span class="ml-auto font-bold">{{class.students.count}} students</span>
+                </p>
+                {% if class.students.count > 0 %}
+                    <table class="w-full table-auto rounded-2xl">
+                        <thead class="bg-gray-300">
+                            <tr class="table-row px-4">
+                                <th class="pl-8 pr-2 py-3 text-left">Student</th>
+                                <th class="pl-8 pr-2 py-3 text-left">Username</th>
+                                <th class="pl-2 pr-8 py-3 text-left">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            {% for student in class.students.all %}
+                            <tr class="border-b border-gray-400 pl-2">
+                                <td class="pl-8 pr-2 py-3 font-sm ml-2">
+                                    {% if student.first_name != "" %}
+                                    {{student.first_name}} {{student.last_name}}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </td>
+                                <td class="pl-8 pr-2 py-3 font-sm pl-2">{{student.username}}</td>
+                                <td class="pl-2 pr-8 py-3 font-sm pl-2">
+                                    
+                                    {% if student.email != "" %}
+                                        <a href="mailto:{{student.email}}">
+                                            <i class="fa-solid fa-envelope mr-2"></i>
+                                            {{student.email}}
+                                        </a>
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                    
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="">
+                        <h1 class="text-md">No Students Here</h1>
+                    </div>
+                {% endif %}
+                </div>
+        </div>
+        
+        <div id="settingsPage" class="hidden col-span-3 bg-white rounded-2xl shadow-xl p-4 border-2 border-black">
+            {% if request.user.id == class.teacher.id %}
+            <div class="mt-2">
+                <h1 class="text-3xl font-bold mb-2">Settings</h1>
+
+                <div>
+                    <form method="post">
+                        <!--Update class Details-->
+                        {% csrf_token %}
+
+                        <div class="flex flex-col gap-2">
+                            <label for="name" class="text-sm">Class Name</label>
+                            <input
+                                type="text"
+                                name="class_name"
+                                id="name"
+                                class="border border-gray-300 rounded-lg p-2"
+                                value="{{class.name}}"
+                            />
+                        </div>
+
+                        <div class="flex flex-col gap-2 mt-4">
+                            <label for="code" class="text-sm">Class Code</label>
+                            <input
+                                type="text"
+                                name="class_code"
+                                id="code"
+                                class="border border-gray-300 rounded-lg p-2"
+                                value="{{class.code}}"
+                                disabled
+                            />
+                            <label for="description" class="text-sm">Description</label>
+                            <textarea
+                                type="textarea"
+                                name="class_desc"
+                                id="class_desc"
+                                class="border border-gray-300 rounded-lg p-2"
+                                value="{{class.description}}"
+                            >{{class.description}}</textarea>
+                            
+
+                            <div class="flex justify-between mt-4">
+                                <input type="text" value="editClass" name="action" hidden>
+                                <button
+                                    type="button"
+                                    class="bg-red-500 hover:bg-red-600 text-white rounded-lg px-4 py-2 font-bold"
+                                    onclick="deleteclassModal()"
+                                >
+                                    Delete Class
+                                </button>
+                                <button
+                                    type="submit"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 font-bold"
+                                >
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    </button>
+                </div>
+            </div>
+            {% else %}
+            <div class="mt-2">
+                Sorry, you are not allowed to access this page.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% else %}
+    <div id="notjoinedsection" class="mt-8 flex flex-col justify-center items-center p-8 bg-white rounded-lg max-w-2xl mx-auto my-auto text-center">
+        <h1 class="font-bold text-lg">Sorry, you haven't joined this class yet.</h1>
+
+        <div class="mt-4 text-md">
+            <h2><span class="font-bold">Class:</span> {{class.name}}</h2>
+            <h3><span class="font-bold">Teacher:</span> {{class.teacher.first_name}} {{class.teacher.last_name}}</h3>
+        </div>
+
+        <input type="text" id="classcodeprefilled" value="{{class.code}}" disabled class="bg-transparent hidden">
+
+        <button class="mt-4 hover:bg-secondary bg-{{teacher.color.primary}} text-white py-2 px-4 font-bold rounded-lg" onclick="joinclassModal()">
+            Join class
+        </button>
+    </div>
+        
+    {% endif %}
+
+</div>
+
+
+{%endblock%}

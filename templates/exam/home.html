@@ -1,0 +1,125 @@
+{%extends "exam/base.html" %} {% load static %} {% block content %}
+<div class="max-w-7xl mx-auto my-2 p-4">
+    <div class="">
+        <h1 class="text-3xl font-bold">Upcoming Exams</h1>
+
+        <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-4 font-bold"
+        >
+            {%if exams|length > 0 %} {% for exam in exams %}
+            <div
+                class="upcomingExamCard group card text-white rounded-xl bg-primary hover:bg-indigo-500 hover:-translate-y-2 transition duration-300 ease-in-out overflow-hidden border-2 border-black"
+            >
+                <a href="{%url 'examStart' exam.id %}">
+                    <div class="flex flex-col p-4 h-48 w-full truncate">
+                        <div>
+                            <span
+                                class="max-w-full bg-white text-primary px-2 rounded-2xl text-left text-sm"
+                            >
+                                {{exam.classes.name }} | {{exam.classes.code }}
+                            </span>
+                        </div>
+                        <div class="w-full mt-auto">
+                            <h1
+                                class="mt-2 text-white text-2xl font-bold capitalize"
+                            >
+                                {{exam.name}}
+                            </h1>
+                            <p class="">
+                                {{exam.date | date:"d M Y"}},
+                                {{exam.start_time | date:"h:i A"}}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {%endfor%}
+        </div>
+        {%else%}
+        <div class="text-lg font-bold mb-4">No Upcoming Exams.</div>
+        {% endif %}
+    </div>
+    <div class="class">
+        <h1 class="text-3xl font-bold">Your Classes</h1>
+        <h3 class="text-xl font-bold mt-2 text-gray-700">As Teacher</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 my-4">
+            <div
+                class="bg1 bg-tertiary shadow-xl rounded-xl h-48 w-full group overflow-hidden"
+            >
+                <div
+                    class="h-full bg-rose-100 rounded-xl group border-2 border-black"
+                >
+                    <button class="h-full w-full" onclick="createclassModal()">
+                        <div class="h-full flex items-center justify-center">
+                            <span
+                                class="flex flex-col h-12 w-12 rounded-full bg-rose-500 p-4 text-2xl font-bold text-white flex items-center justify-center group-hover:w-full group-hover:h-full group-hover:rounded-xl transition-all duration-100"
+                            >
+                                +
+                                <span class="hidden group-hover:block text-xl"
+                                    >Create New</span
+                                >
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            {%for class in classAsTeacher%}
+
+            <div class="bg-tertiary shadow-xl rounded-xl h-48 w-full">
+                <div
+                    class="teacherClassCard h-full bg-rose-100 rounded-xl origin-bottom-left hover:-rotate-6 transition-all duration-300 border-2 border-black"
+                >
+                    <a href="{%url 'classDetails' class.code %}">
+                        <div class="p-4 flex flex-col h-full">
+                            <p class="">{{class.code}}</p>
+                            <h1 class="mt-auto font-bold">{{class.name}}</h1>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+
+        <h3 class="text-xl font-bold mt-2 text-gray-700">As Student</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 my-4">
+            <div class="bg-secondary shadow-xl rounded-xl h-48 w-full group">
+                <div
+                    class="h-full bg-indigo-50 rounded-xl group border-2 border-black"
+                >
+                    <button
+                        id="homepagejoinclassbutton"
+                        onclick="joinclassModal()"
+                        class="w-full h-full"
+                    >
+                        <div class="h-full flex items-center justify-center">
+                            <span
+                                class="flex flex-col h-12 w-12 rounded-full bg-primary p-4 text-2xl font-bold text-white flex items-center justify-center group-hover:w-full group-hover:h-full group-hover:rounded-xl transition-all duration-100"
+                            >
+                                +
+                                <span class="hidden group-hover:block text-xl"
+                                    >Join Another</span
+                                >
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            {%for class in classAsStudent%}
+
+            <div class="bg-secondary shadow-xl rounded-xl h-48 w-full">
+                <div
+                    class="bg1 bg-indigo-50 h-full rounded-xl origin-bottom-left hover:-rotate-6 transition-all duration-300 border-2 border-black"
+                >
+                    <a href="class/{{class.code}}">
+                        <div class="p-4 flex flex-col h-full">
+                            <p class="">{{class.code}}</p>
+                            <h1 class="mt-auto font-bold">{{class.name}}</h1>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{%endblock%}

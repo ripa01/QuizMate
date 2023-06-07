@@ -1,0 +1,42 @@
+{% load static %}
+<div class="sticky top-0 max-w-screen bg-white py-4 shadow-xl">
+    <div class="max-w-7xl px-4 flex justify-between items-center mx-auto">
+        <div>
+            <a href="/home" class="text-xl md:text-2xl lg:text-4xl text-black font-bold" ><i class="text-2xl mr-2 fa fa-leanpub"></i>QuizMate</a>
+        </div>
+
+        <div class="relative ml-3">
+            <div>
+                <button
+                    type="button"
+                    class="flex max-w-xs items-center rounded-full bg-gray-100 py-1 px-2 gap-2 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    id="user-menu-button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    onclick="profileheaderModal()"
+                >
+                    <span class="sr-only">Open user menu</span>
+                    <img
+                        class="h-8 w-8 rounded-full"
+                        src="https://www.clipartmax.com/png/middle/171-1717870_stockvader-predicted-cron-for-may-user-profile-icon-png.png"
+                        alt=""
+                    />
+                    <p>
+                        {% if request.user.first_name != "" %}
+                        <span class="font-bold">
+                            {{request.user.first_name}}
+                            {{request.user.last_name}}
+                        </span>
+                        {% else %}
+                        <span class="font-bold">{{request.user.username}}</span>
+                        {% endif %}
+                    </p>
+                    <i class="fa-solid fa-caret-down mr-1"></i>
+                </button>
+            </div>
+
+            {% include 'reusable/profileheader.html' %}
+        </div>
+    </div>
+</div>
+{% include 'reusable/logout.html' %}

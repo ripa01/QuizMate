@@ -1,0 +1,87 @@
+{%extends "exam/base.html" %} {% load static %} {% block content %}
+
+<div class="max-w-7xl mx-auto my-2 p-4">
+    <div class="card bg-primary w-full rounded-xl text-white font-bold border-2 border-black flex justify-between items-center">
+        <div class="px-8 py-16">
+            <h1 class="text-3xl font-bold">{{exam.name}}</h1>
+            <p class="text-md mt-2 text-gray-200">{{class.name}}</p>
+            <p class="text-md mt-1 text-gray-200">
+                Student: {{student.first_name}} {{student.last_name}}
+            </p>
+            <p>
+                Marks: {{answersheet.mark}}/{{answersheet.total_marks}}
+            </p>
+            <p>
+                Percentage: {{answersheet.percentage}}%
+            </p>
+        </div>
+        <div class="pr-16">
+            <div class="mb-4 h-24 w-24 rounded-full border-8 border-tertiary flex flex-col items-center justify-center font-bold">
+                <span>{{answersheet.percentage}}%</span>
+            </div>
+            
+            <span>
+                Marks: {{answersheet.mark}}/{{answersheet.total_marks}}
+            </span>
+        </div>
+    </div>
+    <div>
+        
+        <div class="card bg-white w-full rounded-xl mt-4 border-2 border-black">
+            <div class="p-8">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-3xl font-bold">Questions</h1>
+                </div>
+                <div class="mt-4">
+                    {% for answer in answers %}
+                    <div class="card bg-white w-full rounded-xl mt-4 border-2">
+                        <div class="px-8 py-4">
+                            <p>{{q}}</p>
+                            <span class="mb-1 bg-primary text-white font-bold rounded-lg px-2 text-xs" id="qtype{{question.id}}">{{answer.question.question_type}}</span>
+
+                            <div class="flex justify-start gap-8">
+                                <h1 id="q{{question.id}}" class="text-lg font-bold prose prose-slate">{{answer.question.question | safe}}</h1>
+                                
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex flex-col">
+                                    {% for option in answer.question.options.all %}
+                                    <div class="flex items-center">
+                                        {% if option.option == answer.answer %}
+                                        <input
+                                            type="radio"
+                                            id="answer"
+                                            class="mr-2 text-primary"
+                                            disabled
+                                            checked
+                                        />
+                                        {% else %}
+                                        <input
+                                            type="radio"
+                                            id="answer"
+                                            class="mr-2 text-primary"
+                                            disabled
+                                        />
+                                        {% endif %}
+                                        <label for="answer1"
+                                            > <span class="{{question.id}}answer">{{option.option}}</span>
+                                            {% if option.is_correct %}
+                                            <span id="" class="text-xs px-2 rounded-md bg-green-200">Correct</span>
+                                            {% endif %}
+                                            </label
+                                        >
+                                    </div>
+                                    {% endfor %}
+                                    <p>Answered: {{answer.answer}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {%endblock%}
+</div>
